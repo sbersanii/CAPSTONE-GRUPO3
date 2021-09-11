@@ -65,7 +65,3 @@ for restriccion in R:
     Recursos[f"{restriccion}"] = Restricciones_Tipo["Limite Superior"][restriccion]
 
 print(f"Tiempo de carga de datos: {round(time() - t_0, 2)} segundos")
-
-
-print(2.27341e+07-2.22255e+07)
-exit()
