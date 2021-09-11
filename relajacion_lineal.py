@@ -13,7 +13,7 @@ y = {}
 for bloque in B:
     for periodo in range(T):
         if relajacion_lineal:
-            x[bloque, periodo] = modelo.addVar(vtype = GRB.CONTINUOUS, name = f"x_{bloque}_{periodo}") #Variable Eelajada
+            x[bloque, periodo] = modelo.addVar(vtype = GRB.CONTINUOUS, name = f"x_{bloque}_{periodo}") #Variable Relajada
         else:
             x[bloque, periodo] = modelo.addVar(vtype = GRB.BINARY, name = f"x_{bloque}_{periodo}") #Variable Binaria
         for destino in D:
