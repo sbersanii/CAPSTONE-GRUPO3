@@ -1,10 +1,10 @@
 from gurobipy import GRB, quicksum, Model
-#import pandas as pd
 
 from datos import B, T, D, R, P, Profit, Tonelaje, Recursos
 
 #Modelo
 modelo = Model("RL")
+relajacion_lineal = False
 
 #Variables
 x = {}
@@ -12,7 +12,10 @@ y = {}
 
 for bloque in B:
     for periodo in range(T):
-        x[bloque, periodo] = modelo.addVar(vtype = GRB.BINARY, name = f"x_{bloque}_{periodo}") #Variable relajada
+        if relajacion_lineal:
+            x[bloque, periodo] = modelo.addVar(vtype = GRB.CONTINUOUS, name = f"x_{bloque}_{periodo}") #Variable Eelajada
+        else:
+            x[bloque, periodo] = modelo.addVar(vtype = GRB.BINARY, name = f"x_{bloque}_{periodo}") #Variable Binaria
         for destino in D:
             y[bloque, destino, periodo] = modelo.addVar(vtype = GRB.CONTINUOUS, name = f"y_{bloque}_{destino}_{periodo}")
 
@@ -67,7 +70,8 @@ FO = quicksum(quicksum(quicksum(
 
 modelo.update()
 
-modelo.setParam('TimeLimit', 60*1) # 1 Minuto
+minutos_ejecucion = 2
+modelo.setParam('TimeLimit', 60 * minutos_ejecucion)
 modelo.update()
 
 
@@ -76,3 +80,7 @@ modelo.setObjective(FO, GRB.MAXIMIZE)
 modelo.optimize()
 modelo.printAttr("X")
 print("\nObj: %g" % modelo.objVal)
+
+
+# Modelo para problema de PCPSP: Towards Solving Large-Scale Precedence Constrained Production Scheduling Problems in Mining
+# Kenny et.al (2017)
