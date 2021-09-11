@@ -4,7 +4,7 @@ from datos import B, T, D, R, P, Profit, Tonelaje, Recursos
 
 #Modelo
 modelo = Model("RL")
-relajacion_lineal = False
+relajacion_lineal = True
 
 #Variables
 x = {}
@@ -70,7 +70,7 @@ FO = quicksum(quicksum(quicksum(
 
 modelo.update()
 
-minutos_ejecucion = 2
+minutos_ejecucion = 5
 modelo.setParam('TimeLimit', 60 * minutos_ejecucion)
 modelo.update()
 
@@ -81,6 +81,9 @@ modelo.optimize()
 modelo.printAttr("X")
 print("\nObj: %g" % modelo.objVal)
 
+#Resultados
+#Valor sol. óptima problema original: 2.222626362436e+07 en 211.3 segundos (tolerance 1.00e-04) 
+#Valor sol. óptima problema relajado: 2.273408908e+07 en 10.08 segundos
 
 # Modelo para problema de PCPSP: Towards Solving Large-Scale Precedence Constrained Production Scheduling Problems in Mining
 # Kenny et.al (2017)
