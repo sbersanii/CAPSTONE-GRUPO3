@@ -63,5 +63,6 @@ Tonelaje = Bloques["Toneladas"] #ndarray
 Recursos = dict()
 for restriccion in R:
     Recursos[f"{restriccion}"] = Restricciones_Tipo["Limite Superior"][restriccion]
+    
 
 print(f"Tiempo de carga de datos: {round(time() - t_0, 2)} segundos")

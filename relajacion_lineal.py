@@ -62,7 +62,7 @@ for periodo in range(T):
             modelo.addConstr(x[bloque, periodo] >= 0)
 
 
-#Función Objetibvo
+#Función Objetivo
 
 FO = quicksum(quicksum(quicksum(
      Profit[f"{bloque}"][f"{destino}"][f"{periodo}"] * y[bloque, destino, periodo] for periodo in range(T))
