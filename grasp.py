@@ -9,7 +9,7 @@ from random import uniform
 
 p = 0.5
 ro = 0.4
-mu = 1.1
+mu = 4#?
 n = 5
 limite_recursos = Recursos[str(0)]
 
