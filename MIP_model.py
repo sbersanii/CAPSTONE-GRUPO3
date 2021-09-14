@@ -69,4 +69,4 @@ def solve_MIP(conos_seleccionados):
     for variable in modelo.getVars():
         solucion.append([variable.varName, variable.x])
 
-    return solucion, B_mip
+    return solucion

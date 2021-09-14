@@ -39,21 +39,8 @@ for periodo in range(1):
             break
 
     #Resolución de modelo MIP
-    solucion, B_mip = solve_MIP(conos_seleccionados)
-    suma = 0
-    for variable in solucion:
-        if variable[0][0] == "x":
-            if variable[1] > 0:
-                suma += 1
-
-    print(f"Cantidad de bloques minados: {suma}")
-    print(f"Cantidad de bloques en conos iniciales: {len(B_mip)}")
+    solucion = solve_MIP(conos_seleccionados)
             
 
-print(f"Cantidad de conos seleccionados: {len(conos_seleccionados)}")
-valor_solucion = 0
-for cono in conos_seleccionados:
-    valor_solucion += valor_total(cono)
-print(f"Valor total de conos selccionados: {valor_solucion}")
 print(f"Tiempo de construcción solución random: {round(time() - t0, 2)} segundos")
 print("\n")
