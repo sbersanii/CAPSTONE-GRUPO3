@@ -53,6 +53,19 @@ for id in Flujos_Destino["ID"]:
             valor = flujo/((1 + tasa_descuento)**t)
             Profit[f"{id}"][str(destino)][str(t)] = valor
 
+#Diccionario de Flujos totales. Ej: Flujo["11"]["2"] = 21413.268
+Flujos = dict()
+for id in Flujos_Destino["ID"]:
+    Flujos[f"{id}"] = dict()
+    for destino in D:
+        Flujos[f"{id}"][str(destino)] = dict()
+        if destino == 1:
+            flujo = Flujos_Destino["Flujo_Destino_1"][id]
+        elif destino == 2:
+            flujo = Flujos_Destino["Flujo_Destino_2"][id]
+
+        Flujos[f"{id}"][str(destino)] = flujo
+
 #Toneladas de c/bloque. Ej: Tonelaje[0] = 2192.93
 #No se incluyen subíndices d y r, debido a que ambas restricciones y destinos
 #utilizan las mismas toneladas como unidad de recurso.
@@ -64,5 +77,5 @@ Recursos = dict()
 for restriccion in R:
     Recursos[f"{restriccion}"] = Restricciones_Tipo["Limite Superior"][restriccion]
     
-
+print("\n")
 print(f"Tiempo de carga de datos: {round(time() - t_0, 2)} segundos")
