@@ -36,7 +36,7 @@ for periodo in range(1):
                 else:
                     disponible = comprobar_disponibilidad(cono[0], conos_seleccionados)
                 if disponible:
-                    if tonelaje_total(cono[0]) < 0.4*limite_recursos:
+                    if tonelaje_total(cono[0]) < ro*limite_recursos:
                         n_aleatorio = uniform(0, 1)
                         if n_aleatorio < p:
                             conos_seleccionados.append(cono[0])
