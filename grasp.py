@@ -9,7 +9,7 @@ from random import uniform
 
 p = 0.5
 ro = 0.4
-mu = 4#?
+mu = 1.1#?
 n = 5
 limite_recursos = Recursos[str(0)]
 
@@ -22,7 +22,7 @@ for periodo in range(1):
         cono = aplanar(cono)
         lista_conos.append([cono, valor_total(cono)])
     #Ordenamiento por valor de lista de todos los conos
-    ordenar_conos(lista_conos)
+    lista_conos = ordenar_conos(lista_conos)
     
     #Seleccion aleatoria de conos hasta límite de recursos x mu
     soluciones = list()
