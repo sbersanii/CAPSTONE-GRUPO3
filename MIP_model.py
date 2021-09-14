@@ -5,9 +5,13 @@ def solve_MIP(conos_seleccionados):
     #Construcción del conjunto B para el modelo MIP
     B_mip = list()
     for cono in conos_seleccionados:
-        for bloque in cono:
-            if bloque not in B_mip:
-                B_mip.append(bloque)
+        if isinstance(cono, list):
+            for bloque in cono:
+                if bloque not in B_mip:
+                    B_mip.append(bloque)
+        else:
+            if cono not in B_mip:
+                B_mip.append(cono)
 
     #Construcción del conjunto P para el modelo MIP, a partir de conjunto P original.
     P_mip = dict()

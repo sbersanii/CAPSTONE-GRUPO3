@@ -64,7 +64,11 @@ def comprobar_disponibilidad(id_base, conos_seleccionados):
     else:
         disponible = True
         for cono in conos_seleccionados:
-            for bloque in cono:
-                if bloque == id_base:
+            if isinstance(cono, list):
+                for bloque in cono:
+                    if bloque == id_base:
+                        disponible = False
+            else:
+                if cono == id_base:
                     disponible = False
         return disponible

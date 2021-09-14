@@ -10,6 +10,7 @@ from random import uniform
 p = 0.5
 ro = 0.4
 mu = 1.1
+n = 5
 limite_recursos = Recursos[str(0)]
 
 t0 = time()
@@ -24,23 +25,30 @@ for periodo in range(1):
     ordenar_conos(lista_conos)
     
     #Seleccion aleatoria de conos hasta límite de recursos x mu
-    conos_seleccionados = list()
-    recursos_utilizados = 0
-    for cono in lista_conos:
-        if recursos_utilizados < mu*limite_recursos:
-            disponible = comprobar_disponibilidad(cono[0][0], conos_seleccionados)
-            if disponible:
-                if tonelaje_total(cono[0]) < 0.4*limite_recursos:
-                    n_aleatorio = uniform(0, 1)
-                    if n_aleatorio < p:
-                        conos_seleccionados.append(cono[0])
-                        recursos_utilizados += tonelaje_total(cono[0])
-        else:
-            break
+    soluciones = list()
+    for i in range(n):
+        conos_seleccionados = list()
+        recursos_utilizados = 0
+        for cono in lista_conos:
+            if recursos_utilizados < mu*limite_recursos:
+                if isinstance(cono[0], list):
+                    disponible = comprobar_disponibilidad(cono[0][0], conos_seleccionados)
+                else:
+                    disponible = comprobar_disponibilidad(cono[0], conos_seleccionados)
+                if disponible:
+                    if tonelaje_total(cono[0]) < 0.4*limite_recursos:
+                        n_aleatorio = uniform(0, 1)
+                        if n_aleatorio < p:
+                            conos_seleccionados.append(cono[0])
+                            recursos_utilizados += tonelaje_total(cono[0])
+            else:
+                break
 
-    #Resolución de modelo MIP
-    solucion = solve_MIP(conos_seleccionados)
+        #Resolución de modelo MIP
+        solucion = solve_MIP(conos_seleccionados)
+        soluciones.append(solucion)
+
             
 
-print(f"Tiempo de construcción solución random: {round(time() - t0, 2)} segundos")
+print(f"Tiempo de construcción de {len(soluciones)} soluciones random: {round(time() - t0, 2)} segundos")
 print("\n")
