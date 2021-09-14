@@ -1,7 +1,9 @@
 #Random solution contruction
-
 from funciones_grasp import constructor_conos, aplanar, valor_total, tonelaje_total, ordenar_conos, comprobar_disponibilidad
 from datos import B, T, D, R, P, Profit, Tonelaje, Recursos
+from MIP_model import solve_MIP
+
+from gurobipy import Model
 from time import time
 from random import uniform
 
@@ -36,10 +38,22 @@ for periodo in range(1):
         else:
             break
 
+    #Resolución de modelo MIP
+    solucion, B_mip = solve_MIP(conos_seleccionados)
+    suma = 0
+    for variable in solucion:
+        if variable[0][0] == "x":
+            if variable[1] > 0:
+                suma += 1
+
+    print(f"Cantidad de bloques minados: {suma}")
+    print(f"Cantidad de bloques en conos iniciales: {len(B_mip)}")
+            
+
 print(f"Cantidad de conos seleccionados: {len(conos_seleccionados)}")
 valor_solucion = 0
 for cono in conos_seleccionados:
     valor_solucion += valor_total(cono)
 print(f"Valor total de conos selccionados: {valor_solucion}")
-print(f"Tiempo de construcción y seleccion de conos: {round(time() - t0, 2)} segundos")
+print(f"Tiempo de construcción solución random: {round(time() - t0, 2)} segundos")
 print("\n")
