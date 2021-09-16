@@ -1,5 +1,5 @@
 #Random solution contruction
-from funciones_grasp import constructor_conos, aplanar, valor_total, tonelaje_total, ordenar_conos, comprobar_disponibilidad
+from funciones_grasp import constructor_conos, aplanar, valor_total, tonelaje_total, ordenar_conos, comprobar_disponibilidad, seleccionar_solucion, actualizar_conjuntos
 from datos import B, T, D, R, P, Profit, Tonelaje, Recursos
 from MIP_model import solve_MIP
 
@@ -7,28 +7,32 @@ from gurobipy import Model
 from time import time
 from random import uniform
 
+###########  RANDOM SOLUTON CONSTRUCTION   ###########
+
 p = 0.5
 ro = 0.4
 mu = 1.1#?
 n = 5
+w = 2
+
 limite_recursos = Recursos[str(0)]
 
+soluciones_RSC = list() #Soluciones Random Solution Construction
+
 t0 = time()
-for periodo in range(1):
+for periodo in range(T):
+
     lista_conos = list()
     #Construcción de todos los conos en el modelo en t = periodo
     for bloque in B:
-        cono = constructor_conos(bloque, [])
+        cono = constructor_conos(bloque, [], P)
         cono = aplanar(cono)
         lista_conos.append([cono, valor_total(cono)])
     #Ordenamiento por valor de lista de todos los conos
     lista_conos = ordenar_conos(lista_conos)
-
-    t1 = time()
-    print(f"Tiempo de construcción de conos del problema: {round(t1 - t0, 2)} segundos\n")
     
     #Seleccion aleatoria de conos hasta límite de recursos x mu
-    soluciones = list()
+    soluciones_periodo = list()
     for i in range(n):
         conos_seleccionados = list()
         recursos_utilizados = 0
@@ -48,13 +52,16 @@ for periodo in range(1):
                 break
 
         #Resolución de modelo MIP
-        solucion, obj = solve_MIP(conos_seleccionados)
-        soluciones.append([solucion, obj])
+        solucion, obj = solve_MIP(conos_seleccionados, P)
+        soluciones_periodo.append([solucion, obj])
+        
+    
+    sol = seleccionar_solucion(soluciones_periodo)
+    B, P = actualizar_conjuntos(sol, B, P)
+    soluciones_RSC.append(sol)
 
-    print(f"\nTiempo de {len(soluciones)} soluciones random sin tiempo de construcción de conos: {round(time() - t1, 2)} segundos")
-    print(f"Tiempo total de construcción de {len(soluciones)} soluciones random: {round(time() - t0, 2)} segundos")
 
-    print("\n")
-    for i in range(n):
-        print(f"Valor objetivo solución {i+1}: {round(soluciones[i][1], 2)}")
-    print("\n")
+###########  LOCAL IMPROVEMENT HEURISTIC   ###########
+
+
+print(f"Tiempo total de Random Solution Construction: {round(time() - t0, 2)}")

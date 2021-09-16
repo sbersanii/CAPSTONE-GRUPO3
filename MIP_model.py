@@ -1,7 +1,7 @@
 from gurobipy import GRB, quicksum, Model
-from datos import R, D, Recursos, P, Flujos, Tonelaje
+from datos import R, D, Recursos, Flujos, Tonelaje
 
-def solve_MIP(conos_seleccionados):
+def solve_MIP(conos_seleccionados, P):
     #Construcción del conjunto B para el modelo MIP
     B_mip = list()
     for cono in conos_seleccionados:

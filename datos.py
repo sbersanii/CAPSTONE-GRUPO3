@@ -16,7 +16,8 @@ elif dataset == 2:
 Periodos_y_Tasa_de_Descuento = pd.read_excel(f"dataset{dataset}.xlsx", sheet_name=nombre)
 
 #Conjunto de bloques (IDs)
-B = Bloques["ID"] #ndarray
+B1 = Bloques["ID"] #ndarray
+B = B1.to_list() #list
 
 #Periodos de tiempo (int)
 T = Periodos_y_Tasa_de_Descuento["N_Periodos"][0]

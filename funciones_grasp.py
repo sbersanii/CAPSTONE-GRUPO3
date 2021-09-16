@@ -1,7 +1,8 @@
-from datos import P, Flujos, Tonelaje
+from datos import Flujos, Tonelaje
+import pandas as pd
 
 #Construir un cono (lista con IDs) a partir de bloque base (id_base)
-def constructor_conos(id_base, lista_bloques):
+def constructor_conos(id_base, lista_bloques, P):
     if len(P[f"{id_base}"]) == 0:
         lista_bloques.append(id_base)
         return id_base
@@ -10,7 +11,7 @@ def constructor_conos(id_base, lista_bloques):
         for id_predecesor in P[f"{id_base}"]:
             if id_predecesor not in lista_bloques:
                 lista_bloques.append(id_predecesor)
-                lista_predecesores.append(constructor_conos(id_predecesor, lista_bloques))
+                lista_predecesores.append(constructor_conos(id_predecesor, lista_bloques, P))
         return [id_base, lista_predecesores]
 
     
@@ -72,3 +73,26 @@ def comprobar_disponibilidad(id_base, conos_seleccionados):
                 if cono == id_base:
                     disponible = False
         return disponible
+
+
+def seleccionar_solucion(soluciones_periodo):
+    mejor_solucion = [None, 0]
+    for solucion in soluciones_periodo:
+        if solucion[1] > mejor_solucion[1]:
+            mejor_solucion = solucion
+
+    return mejor_solucion
+
+def actualizar_conjuntos(sol, B, P): # sol: [variables, VO]
+    for variable in sol[0]:
+        if variable[0][0] == "x":
+            if variable[1] == 1:
+                bloque = variable[0][2:]
+                B.remove(int(bloque))
+                del P[bloque]
+                for key in P.keys():
+                    for bloque_precedente in P[key]:
+                        if bloque_precedente == int(bloque):
+                            P[key].remove(int(bloque))
+
+    return B, P
