@@ -73,6 +73,8 @@ while not termino:
         print(f"Valor Objetivo ventana periodo {periodo}: {valor_ventana}")
 
         #Falta actualizar el conjunto soluciones_RSC con solución_ventana (considerar que ahora las variables tienen
-        #subíndice t).
+        #subíndice t). Posible solución: añadir a variables inicialmente añadidas a soluciones_RSC (en Random Solution
+        #Construction), el subíndice del periodo que les corresponde, de esta manera la actualización de conjunto
+        #soluciones_RSC será simplemente reemplazar las w soluciones iniciales por las soluciones nuevas.
 
-    exit()
+        exit()
