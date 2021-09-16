@@ -1,7 +1,7 @@
 #Random solution contruction
-from funciones_grasp import constructor_conos, aplanar, valor_total, tonelaje_total, ordenar_conos, comprobar_disponibilidad, seleccionar_solucion, actualizar_conjuntos
+from funciones_grasp import constructor_conos, aplanar, valor_total, tonelaje_total, ordenar_conos, comprobar_disponibilidad, seleccionar_solucion, actualizar_conjuntos, crear_conjunto_P, crear_conjunto_B
 from datos import B, T, D, R, P, Profit, Tonelaje, Recursos
-from MIP_model import solve_MIP
+from MIP_model import solve_MIP, solve_MIP2
 
 from gurobipy import Model
 from time import time
@@ -12,7 +12,7 @@ from random import uniform
 p = 0.5
 ro = 0.4
 mu = 1.1#?
-n = 5
+n = 1
 w = 2
 
 limite_recursos = Recursos[str(0)]
@@ -52,16 +52,24 @@ for periodo in range(T):
                 break
 
         #Resolución de modelo MIP
-        solucion, obj = solve_MIP(conos_seleccionados, P)
-        soluciones_periodo.append([solucion, obj])
+        variables, obj = solve_MIP(conos_seleccionados, P)
+        soluciones_periodo.append([variables, obj])
         
     
     sol = seleccionar_solucion(soluciones_periodo)
     B, P = actualizar_conjuntos(sol, B, P)
-    soluciones_RSC.append(sol)
-
-
-###########  LOCAL IMPROVEMENT HEURISTIC   ###########
-
+    soluciones_RSC.append([periodo, sol])
 
 print(f"Tiempo total de Random Solution Construction: {round(time() - t0, 2)}")
+###########  LOCAL IMPROVEMENT HEURISTIC   ###########
+
+termino = False
+while not termino:
+    for t in range(T - w + 1):
+        periodo = T - t - 1
+        Bloques_ventana = crear_conjunto_B(soluciones_RSC, periodo, w)
+        Precedencias_ventana = crear_conjunto_P(Bloques_ventana)
+        solucion_ventana, valor_ventana = solve_MIP2(Bloques_ventana, Precedencias_ventana, w, periodo)
+        print(f"Valor Objetivo ventana periodo {periodo}: {valor_ventana}")
+
+    exit()

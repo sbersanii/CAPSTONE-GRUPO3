@@ -1,5 +1,7 @@
-from datos import Flujos, Tonelaje
+from datos import Flujos, Tonelaje, P
 import pandas as pd
+
+P_original = P.copy()
 
 #Construir un cono (lista con IDs) a partir de bloque base (id_base)
 def constructor_conos(id_base, lista_bloques, P):
@@ -96,3 +98,27 @@ def actualizar_conjuntos(sol, B, P): # sol: [variables, VO]
                             P[key].remove(int(bloque))
 
     return B, P
+
+def crear_conjunto_P(bloques):
+    Precedencias = dict()
+    for key in P_original.keys():
+        if int(key) in bloques:
+            Precedencias[key] = list()
+            for bloque_precedente in P_original[key]:
+                if bloque_precedente in bloques:
+                    Precedencias[key].append(bloque_precedente)
+
+    return Precedencias
+
+def crear_conjunto_B(soluciones_RSC, periodo, w):
+    Bloques = list()
+    for i in range(w):
+        t = periodo - i
+        for solucion in soluciones_RSC:
+            if solucion[0] == t:
+                for variable in solucion[1][0]:
+                    if variable[0][0] == "x":
+                        if variable[1] == 1:
+                            Bloques.append(int(variable[0][2:]))
+
+    return Bloques
