@@ -23,6 +23,9 @@ for periodo in range(1):
         lista_conos.append([cono, valor_total(cono)])
     #Ordenamiento por valor de lista de todos los conos
     lista_conos = ordenar_conos(lista_conos)
+
+    t1 = time()
+    print(f"Tiempo de construcción de conos del problema: {round(t1 - t0, 2)} segundos\n")
     
     #Seleccion aleatoria de conos hasta límite de recursos x mu
     soluciones = list()
@@ -45,10 +48,13 @@ for periodo in range(1):
                 break
 
         #Resolución de modelo MIP
-        solucion = solve_MIP(conos_seleccionados)
-        soluciones.append(solucion)
+        solucion, obj = solve_MIP(conos_seleccionados)
+        soluciones.append([solucion, obj])
 
-            
+    print(f"\nTiempo de {len(soluciones)} soluciones random sin tiempo de construcción de conos: {round(time() - t1, 2)} segundos")
+    print(f"Tiempo total de construcción de {len(soluciones)} soluciones random: {round(time() - t0, 2)} segundos")
 
-print(f"Tiempo de construcción de {len(soluciones)} soluciones random: {round(time() - t0, 2)} segundos")
-print("\n")
+    print("\n")
+    for i in range(n):
+        print(f"Valor objetivo solución {i+1}: {round(soluciones[i][1], 2)}")
+    print("\n")

@@ -2,7 +2,7 @@ import pandas as pd
 from time import time
 
 t_0 = time()
-dataset = 2
+dataset = 1
 
 Bloques = pd.read_excel(f"dataset{dataset}.xlsx", sheet_name="Bloques")
 Precedencias = pd.read_excel(f"dataset{dataset}.xlsx", sheet_name="Precedencias")
@@ -78,4 +78,5 @@ for restriccion in R:
     Recursos[f"{restriccion}"] = Restricciones_Tipo["Limite Superior"][restriccion]
     
 print("\n")
+print(f"Dataset seleccionado: {dataset}")
 print(f"Tiempo de carga de datos: {round(time() - t_0, 2)} segundos")

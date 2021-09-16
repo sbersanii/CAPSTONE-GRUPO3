@@ -65,6 +65,9 @@ def solve_MIP(conos_seleccionados):
          Flujos[f"{bloque}"][f"{destino}"] * y[bloque, destino]
          for destino in D) for bloque in B_mip)
 
+    #Desactivar Log a Consola
+    modelo.Params.LogToConsole = 0
+
     modelo.update()
     modelo.setObjective(FO, GRB.MAXIMIZE)
     modelo.optimize()
@@ -73,4 +76,4 @@ def solve_MIP(conos_seleccionados):
     for variable in modelo.getVars():
         solucion.append([variable.varName, variable.x])
 
-    return solucion
+    return solucion, modelo.objVal
