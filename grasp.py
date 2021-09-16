@@ -72,4 +72,7 @@ while not termino:
         solucion_ventana, valor_ventana = solve_MIP2(Bloques_ventana, Precedencias_ventana, w, periodo)
         print(f"Valor Objetivo ventana periodo {periodo}: {valor_ventana}")
 
+        #Falta actualizar el conjunto soluciones_RSC con solución_ventana (considerar que ahora las variables tienen
+        #subíndice t).
+
     exit()
