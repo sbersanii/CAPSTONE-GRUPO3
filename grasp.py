@@ -13,7 +13,6 @@ p = 0.5
 ro = 0.4
 mu = 1.1#?
 n = 1
-w = 2
 
 limite_recursos = Recursos[str(0)]
 
@@ -62,6 +61,8 @@ for periodo in range(T):
 
 print(f"Tiempo total de Random Solution Construction: {round(time() - t0, 2)}")
 ###########  LOCAL IMPROVEMENT HEURISTIC   ###########
+
+w = 2
 
 termino = False
 while not termino:
