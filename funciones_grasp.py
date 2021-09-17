@@ -1,4 +1,4 @@
-from datos import Flujos, Tonelaje, P
+from datos import Flujos, Tonelaje, P, Profit
 import pandas as pd
 
 P_original = P.copy()
@@ -110,15 +110,48 @@ def crear_conjunto_P(bloques):
 
     return Precedencias
 
-def crear_conjunto_B(soluciones_RSC, periodo, w):
+def crear_conjunto_B(soluciones_RSC, periodo, w): #Soluciones_RSC: [[t0, solt0], [t1, solt1], ...]
     Bloques = list()
     for i in range(w):
         t = periodo - i
         for solucion in soluciones_RSC:
             if solucion[0] == t:
-                for variable in solucion[1][0]:
+                for variable in solucion[1]:
                     if variable[0][0] == "x":
                         if variable[1] == 1:
-                            Bloques.append(int(variable[0][2:]))
-
+                            indices = variable[0].split("_")
+                            id_bloque = int(indices[1])
+                            Bloques.append(id_bloque)
+    
     return Bloques
+
+def incluir_periodo(variables, periodo):
+    for variable in variables:
+        variable[0] = variable[0] + f"_{periodo}"
+
+    return variables
+
+def actualizar_valor_objetivo(soluciones_ventanas):
+    suma = 0
+    for sol_periodo in soluciones_ventanas:
+        for variable in sol_periodo[1]:
+            if variable[0][0] == "y":
+                indices = variable[0].split("_")
+                suma += variable[1] * Profit[indices[1]][indices[2]][indices[3]]
+
+    return suma
+
+
+def actualizar_soluciones_ventanas(soluciones_ventanas, variables_ventana, w, periodo):
+    for i in range(w):
+        t = periodo - i
+        sol = list()
+        for variable in variables_ventana:
+            if variable[0][0] == "x":
+                indices = variable[0].split("_")
+            if int(indices[2]) == t:
+                sol.append(variable)
+            
+        soluciones_ventanas[t] = [t, sol]
+
+    return soluciones_ventanas

@@ -1,5 +1,5 @@
 #Random solution contruction
-from funciones_grasp import constructor_conos, aplanar, valor_total, tonelaje_total, ordenar_conos, comprobar_disponibilidad, seleccionar_solucion, actualizar_conjuntos, crear_conjunto_P, crear_conjunto_B
+from funciones_grasp import constructor_conos, aplanar, valor_total, tonelaje_total, ordenar_conos, comprobar_disponibilidad, seleccionar_solucion, actualizar_conjuntos, crear_conjunto_P, crear_conjunto_B, incluir_periodo, actualizar_valor_objetivo, actualizar_soluciones_ventanas
 from datos import B, T, D, R, P, Profit, Tonelaje, Recursos
 from MIP_model import solve_MIP, solve_MIP2
 
@@ -12,7 +12,7 @@ from random import uniform
 p = 0.5
 ro = 0.4
 mu = 1.1#?
-n = 1
+n = 5
 
 limite_recursos = Recursos[str(0)]
 
@@ -57,25 +57,40 @@ for periodo in range(T):
     
     sol = seleccionar_solucion(soluciones_periodo)
     B, P = actualizar_conjuntos(sol, B, P)
-    soluciones_RSC.append([periodo, sol])
+    soluciones_RSC.append([periodo, incluir_periodo(sol[0], periodo)])
 
 print(f"Tiempo total de Random Solution Construction: {round(time() - t0, 2)}")
 ###########  LOCAL IMPROVEMENT HEURISTIC   ###########
 
 w = 2
+gap = 0.001 # %
+time_limit = 2 #minutos
 
+soluciones_ventanas = soluciones_RSC
 termino = False
+VO = 1
+t_inicio = time()
 while not termino:
     for t in range(T - w + 1):
         periodo = T - t - 1
-        Bloques_ventana = crear_conjunto_B(soluciones_RSC, periodo, w)
+        Bloques_ventana = crear_conjunto_B(soluciones_ventanas, periodo, w)
         Precedencias_ventana = crear_conjunto_P(Bloques_ventana)
-        solucion_ventana, valor_ventana = solve_MIP2(Bloques_ventana, Precedencias_ventana, w, periodo)
-        print(f"Valor Objetivo ventana periodo {periodo}: {valor_ventana}")
+        variables_ventana, valor_ventana = solve_MIP2(Bloques_ventana, Precedencias_ventana, w, periodo)
 
-        #Falta actualizar el conjunto soluciones_RSC con solución_ventana (considerar que ahora las variables tienen
-        #subíndice t). Posible solución: añadir a variables inicialmente añadidas a soluciones_RSC (en Random Solution
-        #Construction), el subíndice del periodo que les corresponde, de esta manera la actualización de conjunto
-        #soluciones_RSC será simplemente reemplazar las w soluciones iniciales por las soluciones nuevas.
+        soluciones_ventanas = actualizar_soluciones_ventanas(soluciones_ventanas, variables_ventana, w, periodo)
 
-        exit()
+    nuevo_VO = actualizar_valor_objetivo(soluciones_ventanas)
+    print(f"Valor objetivo actual: {nuevo_VO}")
+    if (100*(nuevo_VO - VO)/VO) < gap:
+        termino = True
+        print(f"Convergencia de la solución alcanzada (gap: {gap}%)")
+    else:
+        VO = nuevo_VO
+
+    if (time() - t_inicio) >= (time_limit * 60):
+        termino = True
+        print(f"Límite de tiempo alcanzado: {time_limit} minutos.")
+
+#Hay un error en Local Improvement Heuristic! :
+#1) Da inicialmente valores objetivo mayores al óptimo
+#2) A partir de la segunda pasada de ventana, el valor óptimo empieza a disminuir
