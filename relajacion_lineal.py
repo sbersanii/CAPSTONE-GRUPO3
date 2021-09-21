@@ -4,7 +4,7 @@ from datos import B, T, D, R, P, Profit, Tonelaje, Recursos
 
 #Modelo
 modelo = Model("RL")
-relajacion_lineal = False
+relajacion_lineal = True
 
 #Variables
 x = {}

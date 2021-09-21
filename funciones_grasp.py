@@ -131,7 +131,7 @@ def incluir_periodo(variables, periodo):
 
     return variables
 
-def actualizar_valor_objetivo(soluciones_ventanas):
+def actualizar_valor_objetivo(soluciones_ventanas): # [[t, varst], [t2, varst2], ...]
     suma = 0
     for sol_periodo in soluciones_ventanas:
         for variable in sol_periodo[1]:
@@ -141,17 +141,33 @@ def actualizar_valor_objetivo(soluciones_ventanas):
 
     return suma
 
-
 def actualizar_soluciones_ventanas(soluciones_ventanas, variables_ventana, w, periodo):
-    for i in range(w):
-        t = periodo - i
+    minados = list()
+    for i in range(w, 0, -1):
+        t = periodo - i + 1
         sol = list()
         for variable in variables_ventana:
             if variable[0][0] == "x":
+                if variable[1] == 1:
+                    indices = variable[0].split("_")
+                    if int(indices[2]) == t and (indices[1] not in minados):
+                        sol.append(variable)
+                        minados.append(indices[1])
+
+            if variable[0][0] == "y":
                 indices = variable[0].split("_")
-            if int(indices[2]) == t:
-                sol.append(variable)
+                if int(indices[3]) == t:
+                    if indices[1] in minados:
+                        sol.append(variable)
+
             
         soluciones_ventanas[t] = [t, sol]
 
     return soluciones_ventanas
+
+def comprobar_solucion(soluciones_ventanas):
+    minados = list()
+    for soluciones_periodo in soluciones_ventanas:
+        for variable in soluciones_periodo[1]:
+            if variable[0][0] == "x":
+                minados.append(variable)
