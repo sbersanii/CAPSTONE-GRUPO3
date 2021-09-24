@@ -4,7 +4,7 @@ from datos import B, T, D, R, P, Profit, Tonelaje, Recursos
 
 #Modelo
 modelo = Model("RL")
-relajacion_lineal = True
+relajacion_lineal = False
 
 #Variables
 x = {}
@@ -49,6 +49,7 @@ for periodo in range(T):
     for restriccion in R:
         modelo.addConstr(quicksum(quicksum(Tonelaje[bloque] * y[bloque, destino, periodo] for destino in D) for bloque in B)
         <= Recursos[f"{restriccion}"])
+
 
 #Restricciones Naturaleza de Variables
 for periodo in range(T):

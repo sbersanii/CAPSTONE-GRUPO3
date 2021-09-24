@@ -41,6 +41,8 @@ for id in Precedencias["ID"]:
 #Diccionario de parámetros p_{bdt}. Ej: Profit["1"]["2"]["0"] = 24829.116
 Profit = dict()
 tasa_descuento = Periodos_y_Tasa_de_Descuento["Tasa_Descuento"][0]
+
+
 for id in Flujos_Destino["ID"]:
     Profit[f"{id}"] = dict()
     for destino in D:
@@ -53,6 +55,7 @@ for id in Flujos_Destino["ID"]:
 
             valor = flujo/((1 + tasa_descuento)**t)
             Profit[f"{id}"][str(destino)][str(t)] = valor
+        
 
 #Diccionario de Flujos totales. Ej: Flujo["11"]["2"] = 21413.268
 Flujos = dict()
@@ -72,11 +75,13 @@ for id in Flujos_Destino["ID"]:
 #utilizan las mismas toneladas como unidad de recurso.
 Tonelaje = Bloques["Toneladas"] #ndarray
 
+
 #Diccionario de límites superiores de restricciones (recursos)
 #No se incluye subíndice t debido a que, en estos dataset, recursos no cambian en el tiempo.
 Recursos = dict()
 for restriccion in R:
     Recursos[f"{restriccion}"] = Restricciones_Tipo["Limite Superior"][restriccion]
+
     
 print("\n")
 print(f"Dataset seleccionado: {dataset}")
