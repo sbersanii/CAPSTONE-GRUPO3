@@ -1,8 +1,6 @@
 from datos import Flujos, Tonelaje, P, Profit
 import pandas as pd
 
-P_original = P.copy()
-
 #Construir un cono (lista con IDs) a partir de bloque base (id_base)
 def constructor_conos(id_base, lista_bloques, P):
     if len(P[f"{id_base}"]) == 0:
@@ -99,12 +97,12 @@ def actualizar_conjuntos(sol, B, P): # sol: [variables, VO]
 
     return B, P
 
-def crear_conjunto_P(bloques):
+def crear_conjunto_P(bloques, P2):
     Precedencias = dict()
-    for key in P_original.keys():
+    for key in P2.keys():
         if int(key) in bloques:
             Precedencias[key] = list()
-            for bloque_precedente in P_original[key]:
+            for bloque_precedente in P2[key]:
                 if bloque_precedente in bloques:
                     Precedencias[key].append(bloque_precedente)
 
@@ -165,9 +163,14 @@ def actualizar_soluciones_ventanas(soluciones_ventanas, variables_ventana, w, pe
 
     return soluciones_ventanas
 
-def comprobar_solucion(soluciones_ventanas):
+def comprobar_solucion(soluciones_ventanas, P2):
+    print(P2)
     minados = list()
     for soluciones_periodo in soluciones_ventanas:
         for variable in soluciones_periodo[1]:
             if variable[0][0] == "x":
                 minados.append(variable)
+    # minados = [['x_169_0', 1.0], ['x_44_0', 1.0], ...]
+
+
+

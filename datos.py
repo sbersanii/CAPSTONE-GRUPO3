@@ -38,6 +38,16 @@ for id in Precedencias["ID"]:
                 lista_precedecesores.append(int(Precedencias[key][id]))
     P[f"{id}"] = lista_precedecesores
 
+#Diccionario de precedencias2. Ej: P["1"] = [2, 9]
+P2 = dict() #dict
+for id in Precedencias["ID"]:
+    lista_precedecesores = list()
+    for key in Precedencias.keys():
+        if key != "ID" and key != "N_Predecesores":
+            if Precedencias[key][id] > -1:
+                lista_precedecesores.append(int(Precedencias[key][id]))
+    P2[f"{id}"] = lista_precedecesores
+
 #Diccionario de parámetros p_{bdt}. Ej: Profit["1"]["2"]["0"] = 24829.116
 Profit = dict()
 tasa_descuento = Periodos_y_Tasa_de_Descuento["Tasa_Descuento"][0]
@@ -52,7 +62,6 @@ for id in Flujos_Destino["ID"]:
                 flujo = Flujos_Destino["Flujo_Destino_1"][id]
             elif destino == 2:
                 flujo = Flujos_Destino["Flujo_Destino_2"][id]
-
             valor = flujo/((1 + tasa_descuento)**t)
             Profit[f"{id}"][str(destino)][str(t)] = valor
         

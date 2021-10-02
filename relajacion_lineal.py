@@ -71,7 +71,7 @@ FO = quicksum(quicksum(quicksum(
 
 modelo.update()
 
-minutos_ejecucion = 5
+minutos_ejecucion = 50
 modelo.setParam('TimeLimit', 60 * minutos_ejecucion)
 modelo.update()
 
@@ -85,6 +85,8 @@ print("\nObj: %g" % modelo.objVal)
 #Resultados
 #Valor sol. óptima problema original: 2.222626362436e+07 en 211.3 segundos (tolerance 1.00e-04) 
 #Valor sol. óptima problema relajado: 2.273408908e+07 en 10.08 segundos
+#Valor sol. óptima problema con heurística: 2.21564385940+07 en 26.17 segundos (Diferencia: 69825.03034495562)
+
 
 # Modelo para problema de PCPSP: Towards Solving Large-Scale Precedence Constrained Production Scheduling Problems in Mining
 # Kenny et.al (2017)

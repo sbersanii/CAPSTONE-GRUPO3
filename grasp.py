@@ -1,6 +1,6 @@
 #Random solution contruction
 from funciones_grasp import constructor_conos, aplanar, valor_total, tonelaje_total, ordenar_conos, comprobar_disponibilidad, seleccionar_solucion, actualizar_conjuntos, crear_conjunto_P, crear_conjunto_B, incluir_periodo, actualizar_valor_objetivo, actualizar_soluciones_ventanas, comprobar_solucion
-from datos import B, T, D, R, P, Profit, Tonelaje, Recursos
+from datos import B, T, D, R, P, Profit, Tonelaje, Recursos, P2
 from MIP_model import solve_MIP, solve_MIP2
 
 from gurobipy import Model
@@ -11,9 +11,8 @@ from random import uniform
 
 p = 0.5
 ro = 0.4
-mu = 1.1#?
+mu = 2.6#?
 n = 5
-
 limite_recursos = Recursos[str(0)]
 
 soluciones_RSC = list() #Soluciones Random Solution Construction
@@ -81,10 +80,11 @@ while not termino:
 
         periodo = T - t - 1
         Bloques_ventana = crear_conjunto_B(soluciones_ventanas, periodo, w)
-        Precedencias_ventana = crear_conjunto_P(Bloques_ventana)
+        Precedencias_ventana = crear_conjunto_P(Bloques_ventana, P2)
         variables_ventana, valor_ventana = solve_MIP2(Bloques_ventana, Precedencias_ventana, w, periodo)
 
         soluciones_ventanas = actualizar_soluciones_ventanas(soluciones_ventanas, variables_ventana, w, periodo)
+
 
     nuevo_VO = actualizar_valor_objetivo(soluciones_ventanas)
     print(f"Valor objetivo actual: {nuevo_VO}")
@@ -100,6 +100,7 @@ while not termino:
         print(f"Límite de tiempo alcanzado: {time_limit} minutos.")
 
 #factible = comprobar_solucion(soluciones_ventanas)
+print(f'Comparacion: {(2.222626362436*(10**7)) - nuevo_VO}')
 
 #VO mayor a relajacion_lineal.py, comprobar que conjunto soluciones_ventana final sea factible
 #Con conjunto P (datos.py) de precedencias.
