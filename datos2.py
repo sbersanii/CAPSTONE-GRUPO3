@@ -1,9 +1,9 @@
 import pandas as pd
 from time import time
+from parametros import dataset
 
 def obtener_datos():
     t0 = time()
-    dataset = 1
 
     Bloques = pd.read_excel(f"dataset{dataset}.xlsx", sheet_name="Bloques")
     Precedencias = pd.read_excel(f"dataset{dataset}.xlsx", sheet_name="Precedencias")

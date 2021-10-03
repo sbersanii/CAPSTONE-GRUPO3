@@ -10,7 +10,7 @@ tiempo_total = 0
 
 for i in range(iteraciones_grasp):
     B, T, D, R, P, Profit, Tonelaje, Recursos, P2, t_carga = obtener_datos()
-    VO, tiempo = ejecutar_grasp(B, T, D, R, P, Profit, Tonelaje, Recursos, P2)
+    VO, tiempo, solucion = ejecutar_grasp(B, T, D, R, P, Profit, Tonelaje, Recursos, P2, i)
     suma_VO += VO
     lista_soluciones.append(VO)
     tiempo_total += tiempo - t_carga
