@@ -2,6 +2,7 @@
 from funciones_grasp import constructor_conos, aplanar, valor_total, tonelaje_total, ordenar_conos, comprobar_disponibilidad, seleccionar_solucion, actualizar_conjuntos, crear_conjunto_P, crear_conjunto_B, incluir_periodo, actualizar_valor_objetivo, actualizar_soluciones_ventanas, comprobar_solucion
 from MIP_model import solve_MIP, solve_MIP2
 from parametros import p, ro, mu, n, w, gap, window_time_limit
+from datos2 import obtener_datos
 
 from gurobipy import Model
 from time import time
@@ -105,4 +106,10 @@ def ejecutar_grasp(B, T, D, R, P, Profit, Tonelaje, Recursos, P2, i):
 
     return VO, time()-t0, soluciones_ventanas
 
-#Formato solución: soluciones_ventanas = [[t0, [varst0]], [t1, [varst1]], ...]
+
+
+if __name__ == "__main__":
+    B2, T, D, R, P, Profit, Tonelaje, Recursos, P2, t_carga = obtener_datos()
+    VO, tiempo, soluciones_ventanas = ejecutar_grasp(B2, T, D, R, P, Profit, Tonelaje, Recursos, P2, 0)
+    factible = comprobar_solucion(soluciones_ventanas)
+    print(f"Solución factible: {factible}")

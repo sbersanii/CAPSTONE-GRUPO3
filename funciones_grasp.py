@@ -1,4 +1,4 @@
-from datos import Flujos, Tonelaje, P, Profit
+from datos import Flujos, Tonelaje, P, Profit, B, T
 import pandas as pd
 
 #Construir un cono (lista con IDs) a partir de bloque base (id_base)
@@ -163,14 +163,31 @@ def actualizar_soluciones_ventanas(soluciones_ventanas, variables_ventana, w, pe
 
     return soluciones_ventanas
 
-def comprobar_solucion(soluciones_ventanas, P2):
-    print(P2)
-    minados = list()
-    for soluciones_periodo in soluciones_ventanas:
-        for variable in soluciones_periodo[1]:
-            if variable[0][0] == "x":
-                minados.append(variable)
-    # minados = [['x_169_0', 1.0], ['x_44_0', 1.0], ...]
+def comprobar_solucion(soluciones_ventanas):
+    soluciones = dict()
+    for bloque in B:
+        soluciones[str(bloque)] = list()
 
 
+    for t in range(T):
+        for bloque in B:
+            minado = False
+            for var in soluciones_ventanas[t][1]:
+                indice = var[0].split("_")
+                if "x" == indice[0]:
+                    if indice[1] == str(bloque) and indice[2] == str(t):
+                        minado = True
+            if minado or str(1) in soluciones[str(bloque)]:
+                soluciones[str(bloque)].append(str(1))
+            else:
+                soluciones[str(bloque)].append(str(0))
 
+    factible = True
+    for bloque in soluciones.keys():
+        for t in range(len(soluciones[bloque])):
+            if soluciones[bloque][t] == "1":
+                for bloque_precedente in P[str(bloque)]:
+                    if soluciones[str(bloque_precedente)][t] == 0:
+                        factible = False
+
+    return factible
