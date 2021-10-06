@@ -175,7 +175,7 @@ def comprobar_solucion(soluciones_ventanas):
             for var in soluciones_ventanas[t][1]:
                 indice = var[0].split("_")
                 if "x" == indice[0]:
-                    if indice[1] == str(bloque) and indice[2] == str(t):
+                    if indice[1] == str(bloque) and indice[2] == str(t) and var[1] == 1:
                         minado = True
             if minado or str(1) in soluciones[str(bloque)]:
                 soluciones[str(bloque)].append(str(1))
@@ -187,7 +187,8 @@ def comprobar_solucion(soluciones_ventanas):
         for t in range(len(soluciones[bloque])):
             if soluciones[bloque][t] == "1":
                 for bloque_precedente in P[str(bloque)]:
-                    if soluciones[str(bloque_precedente)][t] == 0:
+                    if soluciones[str(bloque_precedente)][t] == str(0):
+                        print(bloque, bloque_precedente)
                         factible = False
 
     return factible

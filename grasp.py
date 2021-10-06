@@ -8,7 +8,7 @@ from gurobipy import Model
 from time import time
 from random import uniform
 
-habilitar_prints = True
+habilitar_prints = False
 
 def ejecutar_grasp(B, T, D, R, P, Profit, Tonelaje, Recursos, P2, i):
 
@@ -72,12 +72,16 @@ def ejecutar_grasp(B, T, D, R, P, Profit, Tonelaje, Recursos, P2, i):
     VO = 1
     t_inicio = time()
     while not termino:
+        primera_ventana = True
         for t in range(T - w + 1):
 
             periodo = T - t - 1
             Bloques_ventana = crear_conjunto_B(soluciones_ventanas, periodo, w)
             Precedencias_ventana = crear_conjunto_P(Bloques_ventana, P2)
-            variables_ventana, valor_ventana = solve_MIP2(Bloques_ventana, Precedencias_ventana, w, periodo)
+            variables_ventana, valor_ventana = solve_MIP2(Bloques_ventana, Precedencias_ventana, w, periodo, primera_ventana)
+
+            if primera_ventana:
+                primera_ventana = False
 
             soluciones_ventanas = actualizar_soluciones_ventanas(soluciones_ventanas, variables_ventana, w, periodo)
 

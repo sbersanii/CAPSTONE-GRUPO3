@@ -1,6 +1,7 @@
 from grasp import ejecutar_grasp
 from datos2 import obtener_datos
 from numpy import std
+from funciones_grasp import comprobar_solucion
 
 def run(iteraciones):
     suma_VO = 0
@@ -13,9 +14,10 @@ def run(iteraciones):
         suma_VO += VO
         lista_soluciones.append(VO)
         tiempo_total += tiempo - t_carga
+        print(f"Solución de iteración {i} factible: {comprobar_solucion(solucion)}")
 
     print(f"VO promedio: {suma_VO/iteraciones}")
     print(f"Desviación estándar: {std(lista_soluciones)}")
     print(f"Tiempo promedio: {tiempo_total/iteraciones}")
 
-run(20)
+run(50)

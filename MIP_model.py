@@ -79,7 +79,7 @@ def solve_MIP(conos_seleccionados, P):
     return solucion, modelo.objVal
 
 
-def solve_MIP2(B, P, w, t):
+def solve_MIP2(B, P, w, t, primera_ventana):
 
     T = range(t - w + 1, t + 1)
 
@@ -127,6 +127,11 @@ def solve_MIP2(B, P, w, t):
             modelo.addConstr(quicksum(quicksum(Tonelaje[bloque] * y[bloque, destino, periodo] for destino in D) for bloque in B)
             <= Recursos[f"{restriccion}"])
 
+    #Restricción de minado
+    if not primera_ventana:
+        for bloque in B:
+            modelo.addConstr(quicksum(x[bloque, periodo] for periodo in T) >= 1)
+
     #Restricciones Naturaleza de Variables
     for periodo in T:
         for destino in D:
@@ -143,7 +148,7 @@ def solve_MIP2(B, P, w, t):
         Profit[f"{bloque}"][f"{destino}"][f"{periodo}"] * y[bloque, destino, periodo] for periodo in T)
         for destino in D) for bloque in B)
     #Desactivar Log a Consola
-    modelo.Params.LogToConsole = 0
+    #modelo.Params.LogToConsole = 0
 
     modelo.update()
     modelo.setObjective(FO, GRB.MAXIMIZE)
