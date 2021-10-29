@@ -25,7 +25,7 @@ for t in range(T):
             soluciones[str(bloque)].append(str(0))
 
 
-ruta_guardado = os.path.join("Resultados_Grasp", f"resultado_GRASP.csv")
+ruta_guardado = os.path.join("Resultados_Grasp", f"resultado2_GRASP.csv")
 with open(ruta_guardado, "wt", encoding = "UTF-8") as archivo:
     for bloque in soluciones.keys():
         archivo.write(f"{bloque},"+",".join(soluciones[bloque]) + "\n")

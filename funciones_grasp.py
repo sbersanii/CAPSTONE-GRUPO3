@@ -192,3 +192,16 @@ def comprobar_solucion(soluciones_ventanas):
                         factible = False
 
     return factible
+
+def bloques_minados(soluciones_ventanas):
+    
+    for periodo in soluciones_ventanas:
+        bloques_minados = 0
+        for variable in periodo[1]:
+            indice = variable[0].split("_")
+            if "x" == indice[0] and variable[1] == 1:
+                bloques_minados += 1
+        print(f"Bloques minados en periodo {periodo[0]}: {bloques_minados}")
+    print("\n")
+
+    pass

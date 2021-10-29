@@ -20,4 +20,4 @@ def run(iteraciones):
     print(f"Desviación estándar: {std(lista_soluciones)}")
     print(f"Tiempo promedio: {tiempo_total/iteraciones}")
 
-run(50)
+run(3)

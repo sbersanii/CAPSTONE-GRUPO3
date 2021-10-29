@@ -1,16 +1,15 @@
 #Random solution contruction
-from funciones_grasp import constructor_conos, aplanar, valor_total, tonelaje_total, ordenar_conos, comprobar_disponibilidad, seleccionar_solucion, actualizar_conjuntos, crear_conjunto_P, crear_conjunto_B, incluir_periodo, actualizar_valor_objetivo, actualizar_soluciones_ventanas, comprobar_solucion
+from funciones_grasp import constructor_conos, aplanar, valor_total, tonelaje_total, ordenar_conos, comprobar_disponibilidad, seleccionar_solucion, actualizar_conjuntos
+from funciones_grasp import crear_conjunto_P, crear_conjunto_B, incluir_periodo, actualizar_valor_objetivo, actualizar_soluciones_ventanas, comprobar_solucion, bloques_minados
 from MIP_model import solve_MIP, solve_MIP2
-from parametros import p, ro, mu, n, w, gap, window_time_limit
+from parametros import window_time_limit, activar_log_grasp, gap
 from datos2 import obtener_datos
 
-from gurobipy import Model
 from time import time
 from random import uniform
 
-habilitar_prints = False
 
-def ejecutar_grasp(B, T, D, R, P, Profit, Tonelaje, Recursos, P2, i):
+def ejecutar_grasp(B, T, D, R, P, Profit, Tonelaje, Recursos, P2, i, p, ro, mu, n, w):
 
     print(f"Iteración {i}\n")
 
@@ -97,7 +96,7 @@ def ejecutar_grasp(B, T, D, R, P, Profit, Tonelaje, Recursos, P2, i):
         if (time() - t_inicio) >= (window_time_limit * 60):
             termino = True
 
-    if habilitar_prints:
+    if activar_log_grasp:
         print(f"Tiempo total de RSC: {round((t_rsc - t0)/60, 2)} minutos")
         if gap_alcanzado:
             print(f"Convergencia de la solución alcanzada (gap: {gap}%)")
@@ -106,7 +105,7 @@ def ejecutar_grasp(B, T, D, R, P, Profit, Tonelaje, Recursos, P2, i):
             print(f"Límite de tiempo alcanzado: {window_time_limit} minutos.")
 
         print(f"Tiempo total GRASP: {round((time() - t0)/60, 2)} minutos")
-        print(f"Valor objetivo final: {VO}\n")
+        print(f"\nValor objetivo final: {VO}\n")
 
     return VO, time()-t0, soluciones_ventanas
 
@@ -116,4 +115,7 @@ if __name__ == "__main__":
     B2, T, D, R, P, Profit, Tonelaje, Recursos, P2, t_carga = obtener_datos()
     VO, tiempo, soluciones_ventanas = ejecutar_grasp(B2, T, D, R, P, Profit, Tonelaje, Recursos, P2, 0)
     factible = comprobar_solucion(soluciones_ventanas)
+    bloques_minados(soluciones_ventanas)
+
+
     print(f"Solución factible: {factible}")

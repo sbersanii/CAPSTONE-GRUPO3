@@ -1,5 +1,6 @@
 from gurobipy import GRB, quicksum, Model
 from datos import R, D, Recursos, Flujos, Tonelaje, Profit
+from parametros import activar_log_gurobi
 
 def solve_MIP(conos_seleccionados, P):
     #Construcción del conjunto B para el modelo MIP
@@ -66,7 +67,8 @@ def solve_MIP(conos_seleccionados, P):
          for destino in D) for bloque in B_mip)
 
     #Desactivar Log a Consola
-    modelo.Params.LogToConsole = 0
+    if not activar_log_gurobi:
+        modelo.Params.LogToConsole = 0
 
     modelo.update()
     modelo.setObjective(FO, GRB.MAXIMIZE)
@@ -147,8 +149,10 @@ def solve_MIP2(B, P, w, t, primera_ventana):
     FO = quicksum(quicksum(quicksum(
         Profit[f"{bloque}"][f"{destino}"][f"{periodo}"] * y[bloque, destino, periodo] for periodo in T)
         for destino in D) for bloque in B)
+
     #Desactivar Log a Consola
-    #modelo.Params.LogToConsole = 0
+    if not activar_log_gurobi:
+        modelo.Params.LogToConsole = 0
 
     modelo.update()
     modelo.setObjective(FO, GRB.MAXIMIZE)
