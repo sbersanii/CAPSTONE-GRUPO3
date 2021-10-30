@@ -23,6 +23,42 @@ def run(iteraciones, p, ro, mu, n, w):
         with open(ruta_guardado, "a", encoding = "UTF-8") as archivo:
             archivo.write(f"{i},{dataset},{p},{ro},{mu},{n},{w},{VO},{tiempo - t_carga},{factible}\n")
 
-#Ejemplo de iteraciones:
-for mu in np.arange(1.1, 2, 0.1).tolist():
-    run(1, 0.5, 0.4, mu, 5, 3)
+#Rangos de parámetros a estudiar:
+#p: [0.4, 0.6]
+#ro: [0.3, 0.7]
+#mu: [1, 3.5]
+
+#Iteraciones stefano:
+for ro in np.arange(0.3, 0.5, 0.1).tolist():
+    for mu in np.arange(1, 4, 0.5).tolist():
+        run(3, 0.6, ro, mu, 5, 2)
+
+#Iteraciones nico alegria:
+for ro in np.arange(0.5, 0.8, 0.1).tolist():
+    for mu in np.arange(1, 4, 0.5).tolist():
+        run(3, 0.6, ro, mu, 5, 2)
+
+#Iteraciones nico greco:
+for ro in np.arange(0.3, 0.5, 0.1).tolist():
+    for mu in np.arange(1, 4, 0.5).tolist():
+        run(3, 0.5, ro, mu, 5, 2)
+
+#Iteraciones juan:
+for ro in np.arange(0.5, 0.8, 0.1).tolist():
+    for mu in np.arange(1, 4, 0.5).tolist():
+        run(3, 0.5, ro, mu, 5, 2)
+
+#Iteraciones javi:
+for ro in np.arange(0.3, 0.5, 0.1).tolist():
+    for mu in np.arange(1, 4, 0.5).tolist():
+        run(3, 0.4, ro, mu, 5, 2)
+
+#Iteraciones cata:
+for ro in np.arange(0.5, 0.8, 0.1).tolist():
+    for mu in np.arange(1, 4, 0.5).tolist():
+        run(3, 0.4, ro, mu, 5, 2)
+
+#Iteraciones clau:
+for ro in np.arange(0.3, 0.8, 0.1).tolist():
+    for mu in np.arange(1, 4, 0.5).tolist():
+        run(3, 0.7, ro, mu, 5, 2)
