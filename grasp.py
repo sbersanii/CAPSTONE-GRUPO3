@@ -1,13 +1,12 @@
 #Random solution contruction
-from funciones_grasp import constructor_conos, aplanar, valor_total, tonelaje_total, ordenar_conos, comprobar_disponibilidad, seleccionar_solucion, actualizar_conjuntos
+from funciones_grasp import constructor_conos, aplanar, valor_total, tonelaje_total, ordenar_conos, comprobar_disponibilidad, seleccionar_solucion, actualizar_conjuntos, guardar_conos, cargar_conos
 from funciones_grasp import crear_conjunto_P, crear_conjunto_B, incluir_periodo, actualizar_valor_objetivo, actualizar_soluciones_ventanas, comprobar_solucion, bloques_minados
 from MIP_model import solve_MIP, solve_MIP2
-from parametros import window_time_limit, activar_log_grasp, gap
+from parametros import window_time_limit, activar_log_grasp, gap, dataset
 from datos2 import obtener_datos
 
 from time import time
 from random import uniform
-
 
 def ejecutar_grasp(B, T, D, R, P, Profit, Tonelaje, Recursos, P2, i, p, ro, mu, n, w):
 
@@ -26,7 +25,7 @@ def ejecutar_grasp(B, T, D, R, P, Profit, Tonelaje, Recursos, P2, i, p, ro, mu, 
         for bloque in B:
             cono = constructor_conos(bloque, [], P)
             cono = aplanar(cono)
-            lista_conos.append([cono, valor_total(cono)])
+            lista_conos.append([cono, int(valor_total(cono))])
         #Ordenamiento por valor de lista de todos los conos
         lista_conos = ordenar_conos(lista_conos)
         
@@ -70,6 +69,7 @@ def ejecutar_grasp(B, T, D, R, P, Profit, Tonelaje, Recursos, P2, i, p, ro, mu, 
     gap_alcanzado = False
     VO = 1
     t_inicio = time()
+    pasada = 0
     while not termino:
         primera_ventana = True
         for t in range(T - w + 1):
@@ -85,7 +85,11 @@ def ejecutar_grasp(B, T, D, R, P, Profit, Tonelaje, Recursos, P2, i, p, ro, mu, 
             soluciones_ventanas = actualizar_soluciones_ventanas(soluciones_ventanas, variables_ventana, w, periodo)
 
 
-        nuevo_VO = actualizar_valor_objetivo(soluciones_ventanas)
+            nuevo_VO = actualizar_valor_objetivo(soluciones_ventanas)
+            print(f"VO: Pasada {pasada}, ventana {periodo} a {periodo-1}: {nuevo_VO}")
+        pasada += 1
+
+
         if (100*(nuevo_VO - VO)/VO) < gap:
             termino = True
             gap_alcanzado = True
@@ -113,7 +117,7 @@ def ejecutar_grasp(B, T, D, R, P, Profit, Tonelaje, Recursos, P2, i, p, ro, mu, 
 
 if __name__ == "__main__":
     B2, T, D, R, P, Profit, Tonelaje, Recursos, P2, t_carga = obtener_datos()
-    VO, tiempo, soluciones_ventanas = ejecutar_grasp(B2, T, D, R, P, Profit, Tonelaje, Recursos, P2, 0)
+    VO, tiempo, soluciones_ventanas = ejecutar_grasp(B2, T, D, R, P, Profit, Tonelaje, Recursos, P2, 0, 0.5, 0.4, 1.1, 5, 2)
     factible = comprobar_solucion(soluciones_ventanas)
     bloques_minados(soluciones_ventanas)
 
